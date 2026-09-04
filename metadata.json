@@ -1,0 +1,6 @@
+{
+  "name": "Salão Gestão",
+  "description": "Aplicativo completo para salões de beleza com agendamentos, financeiro, pagamentos online, relatórios de desempenho, WhatsApp, fidelidade, equipe e backup em nuvem.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

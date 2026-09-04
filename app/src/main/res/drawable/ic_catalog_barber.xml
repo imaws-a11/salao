@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M0,80 Q70,95 130,75 T200,85 L200,140 L0,140 Z" />
+    <!-- Straight Razor Blade -->
+    <path
+        android:fillColor="#263238"
+        android:pathData="M60,40 L130,40 L125,55 L55,55 Z" />
+    <path
+        android:fillColor="#78909C"
+        android:pathData="M55,55 L125,55 L120,70 L50,70 Z" />
+    <!-- Razor Pivot & Handle -->
+    <path
+        android:fillColor="#BF360C"
+        android:pathData="M50,70 C48,70 45,68 45,65 C45,62 48,60 50,60 L140,85 C145,86 148,90 146,95 L142,105 C140,110 135,112 130,110 L50,70 Z" />
+    <!-- Barber Pole Stripes Accent -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M165,30 L175,30 L165,50 L155,50 Z" />
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M165,50 L175,50 L165,70 L155,70 Z" />
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M165,70 L175,70 L165,90 L155,90 Z" />
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M165,90 L175,90 L165,110 L155,110 Z" />
+</vector>

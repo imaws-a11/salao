@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#EDE7F6"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#D1C4E9"
+        android:pathData="M0,90 Q50,75 100,90 T200,80 L200,140 L0,140 Z" />
+    <!-- Warehouse Shelf Box Isometric -->
+    <!-- Top Face -->
+    <path
+        android:fillColor="#7E57C2"
+        android:pathData="M100,35 L145,55 L100,75 L55,55 Z" />
+    <!-- Left Face -->
+    <path
+        android:fillColor="#5E35B1"
+        android:pathData="M55,55 L100,75 L100,115 L55,95 Z" />
+    <!-- Right Face -->
+    <path
+        android:fillColor="#512DA8"
+        android:pathData="M100,75 L145,55 L145,95 L100,115 Z" />
+    <!-- Box Tape -->
+    <path
+        android:fillColor="#B39DDB"
+        android:pathData="M95,37 L105,42 L105,113 L95,108 Z" />
+    <!-- In/Out Arrows -->
+    <!-- Green Arrow Up (In) -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M35,50 L45,60 L39,60 L39,75 L31,75 L31,60 L25,60 Z" />
+    <!-- Orange Arrow Down (Out) -->
+    <path
+        android:fillColor="#FB8C00"
+        android:pathData="M165,70 L175,60 L169,60 L169,45 L161,45 L161,60 L155,60 Z" />
+</vector>

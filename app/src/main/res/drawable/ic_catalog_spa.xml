@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#F0FBF5"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#C8E6C9"
+        android:pathData="M0,85 Q60,70 120,90 T200,80 L200,140 L0,140 Z" />
+    <!-- Spa Lotus Petals -->
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M100,50 C100,50 82,75 82,92 C82,102 90,110 100,110 C110,110 118,102 118,92 C118,75 100,50 100,50 Z" />
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M100,60 C100,60 88,80 88,95 C88,102 93,107 100,107 C107,107 112,102 112,95 C112,80 100,60 100,60 Z" />
+    <!-- Left Petal -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M100,75 C90,65 72,75 68,90 C65,100 72,108 82,108 C90,108 97,100 100,75 Z" />
+    <!-- Right Petal -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M100,75 C110,65 128,75 132,90 C135,100 128,108 118,108 C110,108 103,100 100,75 Z" />
+    <!-- Water Ripple -->
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M55,112 C75,116 125,116 145,112 C135,118 65,118 55,112 Z" />
+    <!-- Zen Stones -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M145,95 C145,90 155,87 165,87 C175,87 185,90 185,95 C185,100 175,103 165,103 C155,103 145,100 145,95 Z" />
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M150,86 C150,82 158,80 165,80 C172,80 180,82 180,86 C180,90 172,92 165,92 C158,92 150,90 150,86 Z" />
+</vector>

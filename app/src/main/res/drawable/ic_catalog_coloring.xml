@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#FFF0F5"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#FFD8E4"
+        android:pathData="M0,75 Q60,95 120,65 T200,85 L200,140 L0,140 Z" />
+    <!-- Gradient Blobs -->
+    <path
+        android:fillColor="#F2B8B5"
+        android:pathData="M150,40m-20,0a20,20 0,1,1 40,0a20,20 0,1,1 -40,0" />
+    <path
+        android:fillColor="#D0BCFF"
+        android:pathData="M45,50m-22,0a22,22 0,1,1 44,0a22,22 0,1,1 -44,0" />
+    <!-- Color Mixing Bowl -->
+    <path
+        android:fillColor="#7D5260"
+        android:pathData="M70,80 C70,105 82,115 100,115 C118,115 130,105 130,80 Z" />
+    <path
+        android:fillColor="#B3261E"
+        android:pathData="M74,82 C78,92 90,98 100,98 C110,98 122,92 126,82 Z" />
+    <!-- Color Brush -->
+    <path
+        android:fillColor="#6750A4"
+        android:pathData="M110,40 L125,75 L118,78 L103,43 Z" />
+    <path
+        android:fillColor="#E8DEF8"
+        android:pathData="M125,75 L132,90 L122,92 L118,78 Z" />
+    <!-- Droplets -->
+    <path
+        android:fillColor="#B3261E"
+        android:pathData="M88,58 C88,52 94,45 94,45 C94,45 100,52 100,58 C100,62 97,65 94,65 C91,65 88,62 88,58 Z" />
+    <path
+        android:fillColor="#6750A4"
+        android:pathData="M135,52 C135,48 139,42 139,42 C139,42 143,48 143,52 C143,55 141,57 139,57 C137,57 135,55 135,52 Z" />
+    <!-- Sparkles -->
+    <path
+        android:fillColor="#B57A2A"
+        android:pathData="M60,30 L63,22 L66,30 L74,33 L66,36 L63,44 L60,36 L52,33 Z" />
+</vector>

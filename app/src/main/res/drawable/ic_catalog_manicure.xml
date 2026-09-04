@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#FFF5EE"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M0,85 Q80,65 140,85 T200,80 L200,140 L0,140 Z" />
+    <!-- Ambient bubbles -->
+    <path
+        android:fillColor="#F8BBD0"
+        android:pathData="M50,45m-18,0a18,18 0,1,1 36,0a18,18 0,1,1 -36,0" />
+    <path
+        android:fillColor="#E1BEE7"
+        android:pathData="M160,50m-20,0a20,20 0,1,1 40,0a20,20 0,1,1 -40,0" />
+    <!-- Nail Polish Bottle -->
+    <!-- Cap -->
+    <path
+        android:fillColor="#31111D"
+        android:pathData="M92,35 L108,35 L106,62 L94,62 Z" />
+    <!-- Bottle Body -->
+    <path
+        android:fillColor="#C2185B"
+        android:pathData="M84,62 L116,62 L120,108 C120,114 114,118 108,118 L92,118 C86,118 80,114 80,108 Z" />
+    <!-- Polish Gloss Reflection -->
+    <path
+        android:fillColor="#F48FB1"
+        android:pathData="M88,72 L94,72 L92,106 L86,106 Z" />
+    <!-- Manicured Fingernails Art -->
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M130,85 C130,75 137,70 144,70 C151,70 158,75 158,85 L158,115 L130,115 Z" />
+    <!-- French Polish Tip -->
+    <path
+        android:fillColor="#AD1457"
+        android:pathData="M130,85 C130,75 137,70 144,70 C151,70 158,75 158,85 L158,92 C151,88 137,88 130,92 Z" />
+    <!-- Sparkles -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M150,40 L152,34 L154,40 L160,42 L154,44 L152,50 L150,44 L144,42 Z" />
+</vector>

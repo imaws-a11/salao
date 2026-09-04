@@ -1,0 +1,39 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="140dp"
+    android:viewportWidth="200"
+    android:viewportHeight="140">
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M0,0h200v140h-200z" />
+    <path
+        android:fillColor="#FFECB3"
+        android:pathData="M0,80 Q60,65 130,85 T200,75 L200,140 L0,140 Z" />
+    <!-- Luxury Cosmetic Jar -->
+    <path
+        android:fillColor="#FFA000"
+        android:pathData="M75,45 L125,45 C128,45 130,48 130,52 L130,58 C130,60 128,62 125,62 L75,62 C72,62 70,60 70,58 L70,52 C70,48 72,45 75,45 Z" />
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M72,62 L128,62 L132,105 C132,112 124,116 116,116 L84,116 C76,116 68,112 68,105 Z" />
+    <!-- Caviar Pearls -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M95,85m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M106,82m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M100,94m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M88,92m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+    <!-- Sparkles Gold -->
+    <path
+        android:fillColor="#FF8F00"
+        android:pathData="M152,38 L155,30 L158,38 L166,41 L158,44 L155,52 L152,44 L144,41 Z" />
+    <path
+        android:fillColor="#FFA000"
+        android:pathData="M48,65 L50,60 L52,65 L57,67 L52,69 L50,74 L48,69 L43,67 Z" />
+</vector>
