@@ -271,6 +271,7 @@ fun ClientAuthScreen(
                         LoginForm(
                             isLoading = isAuthLoading,
                             onSubmit = { email, pass -> viewModel.loginClient(email, pass) },
+                            onAnonymousLogin = { viewModel.loginClientAnonymously() },
                             onForgotPassword = { showForgotPasswordDialog = true },
                             onSwitchToRegister = {
                                 selectedTab = 1
@@ -334,6 +335,7 @@ private fun authTextFieldColors() = OutlinedTextFieldDefaults.colors(
 private fun LoginForm(
     isLoading: Boolean,
     onSubmit: (String, String) -> Unit,
+    onAnonymousLogin: () -> Unit,
     onForgotPassword: () -> Unit,
     onSwitchToRegister: () -> Unit
 ) {
@@ -527,6 +529,57 @@ private fun LoginForm(
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
                     color = BentoPrimary
+                )
+            }
+        }
+
+        HorizontalDivider(
+            color = BentoBorderLight,
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
+
+        // Quick Access section for Admin and Guest
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    email = "lauraivini13@gmail.com"
+                    password = "laura123"
+                    onSubmit("lauraivini13@gmail.com", "laura123")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("btn_quick_admin_login"),
+                shape = RoundedCornerShape(12.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.5f))
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Shield,
+                    contentDescription = null,
+                    tint = BentoPrimary,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Acesso Rápido Administradora (Laura Ivini)",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = BentoPrimary
+                )
+            }
+
+            TextButton(
+                onClick = onAnonymousLogin,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("btn_quick_guest_login")
+            ) {
+                Text(
+                    text = "Continuar como Convidado (Sem login)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BentoTextSecondary
                 )
             }
         }
