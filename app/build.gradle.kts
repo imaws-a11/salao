@@ -17,8 +17,8 @@ android {
     applicationId = "com.aistudio.salaogestao.kqvwzb"
     minSdk = 24
     targetSdk = 36
-    versionCode = 1
-    versionName = "1.0"
+    versionCode = 3
+    versionName = "3.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -101,8 +101,8 @@ dependencies {
   implementation(libs.coil.compose)
   implementation(libs.converter.moshi)
   implementation(libs.firebase.ai)
-  // Uncomment to use Firestore:
-  // implementation(libs.firebase.firestore)
+  // Firebase Firestore for real-time cloud data sync:
+  implementation(libs.firebase.firestore)
 
   // Firebase Auth for client authentication:
   implementation(libs.firebase.auth)

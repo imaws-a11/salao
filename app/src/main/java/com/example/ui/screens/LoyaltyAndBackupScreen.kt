@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -114,6 +115,9 @@ fun LoyaltyAndBackupScreen(
     val isSyncing by viewModel.isCloudSyncing.collectAsStateWithLifecycle()
     val lastBackupTime by viewModel.lastCloudBackupTime.collectAsStateWithLifecycle()
     val isAutoSync by viewModel.isAutoSyncEnabled.collectAsStateWithLifecycle()
+    val firestoreState by viewModel.firestoreSyncState.collectAsStateWithLifecycle()
+    val appointments by viewModel.allAppointments.collectAsStateWithLifecycle()
+    val transactions by viewModel.filteredTransactions.collectAsStateWithLifecycle()
 
     var redeemingReward by remember { mutableStateOf<LoyaltyReward?>(null) }
 
@@ -271,6 +275,159 @@ fun LoyaltyAndBackupScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
+                    // ==================== BENTO TILE: FIREBASE FIRESTORE ====================
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(26.dp))
+                            .background(if (firestoreState.isLiveConnected) Color(0xFFF0FDF4) else BentoSurface)
+                            .border(
+                                1.dp,
+                                if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.4f) else BentoBorderLight,
+                                RoundedCornerShape(26.dp)
+                            )
+                            .padding(20.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(42.dp)
+                                            .clip(CircleShape)
+                                            .background(if (firestoreState.isLiveConnected) EmeraldSuccess else BentoPrimaryContainer),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            Icons.Default.CloudSync,
+                                            contentDescription = null,
+                                            tint = if (firestoreState.isLiveConnected) Color.White else BentoPrimary,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+                                    Column {
+                                        Text(
+                                            text = "FIREBASE FIRESTORE",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            letterSpacing = 1.sp,
+                                            color = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoPrimary
+                                        )
+                                        Text(
+                                            text = "Sincronização em Tempo Real",
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            color = BentoTextPrimary
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    shape = CircleShape,
+                                    color = if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.15f) else BentoSurfaceVariant
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(8.dp)
+                                                .clip(CircleShape)
+                                                .background(if (firestoreState.isLiveConnected) EmeraldSuccess else Color(0xFFF59E0B))
+                                        )
+                                        Text(
+                                            text = if (firestoreState.isLiveConnected) "Online" else "Room Local",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            color = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoTextPrimary
+                                        )
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = firestoreState.statusMessage,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = BentoTextSecondary
+                            )
+
+                            // 2-Column Metrics for Scheduling & Finance
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                Surface(
+                                    shape = RoundedCornerShape(16.dp),
+                                    color = BentoSurfaceSubtle,
+                                    border = BorderStroke(1.dp, BentoBorderLight),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Column(modifier = Modifier.padding(12.dp)) {
+                                        Text(
+                                            text = "AGENDAMENTOS",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 10.sp,
+                                            color = BentoTextSecondary
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = "${appointments.size} na base",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            color = BentoTextPrimary
+                                        )
+                                        Text(
+                                            text = "Sincronia automática",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontSize = 9.sp,
+                                            color = BentoTextSecondary
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    shape = RoundedCornerShape(16.dp),
+                                    color = BentoSurfaceSubtle,
+                                    border = BorderStroke(1.dp, BentoBorderLight),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Column(modifier = Modifier.padding(12.dp)) {
+                                        Text(
+                                            text = "FINANCEIRO",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 10.sp,
+                                            color = BentoTextSecondary
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = "${transactions.size} lançamentos",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            color = BentoTextPrimary
+                                        )
+                                        Text(
+                                            text = "Receitas & Despesas",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontSize = 9.sp,
+                                            color = BentoTextSecondary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     // Bento Tile: Backup Nuvem Hero (styled directly from Bento Blue Accent spec)
                     Box(
                         modifier = Modifier

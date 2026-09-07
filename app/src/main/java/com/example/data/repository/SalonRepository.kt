@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import com.example.data.firestore.FirestoreSyncService
 import com.example.data.local.SalonDao
 import com.example.data.model.Appointment
 import com.example.data.model.ClientLoyalty
@@ -17,7 +18,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class SalonRepository(private val dao: SalonDao) {
+class SalonRepository(
+    private val dao: SalonDao,
+    private val firestoreSync: FirestoreSyncService? = null
+) {
 
     val appointments: Flow<List<Appointment>> = dao.getAllAppointments()
     val transactions: Flow<List<FinancialTransaction>> = dao.getAllTransactions()
@@ -35,20 +39,27 @@ class SalonRepository(private val dao: SalonDao) {
     }
 
     suspend fun insertAppointment(appointment: Appointment): Long {
-        return dao.insertAppointment(appointment)
+        val id = dao.insertAppointment(appointment)
+        val saved = if (appointment.id == 0L) appointment.copy(id = id) else appointment
+        firestoreSync?.syncAppointment(saved)
+        return id
     }
 
     suspend fun updateAppointment(appointment: Appointment) {
         dao.updateAppointment(appointment)
+        firestoreSync?.syncAppointment(appointment)
     }
 
     suspend fun deleteAppointment(appointment: Appointment) {
         dao.deleteAppointment(appointment)
+        firestoreSync?.deleteAppointment(appointment.id)
     }
 
     suspend fun confirmAppointment(id: Long) {
         val current = dao.getAppointmentById(id) ?: return
-        dao.updateAppointment(current.copy(status = "CONFIRMADO"))
+        val updated = current.copy(status = "CONFIRMADO")
+        dao.updateAppointment(updated)
+        firestoreSync?.syncAppointment(updated)
     }
 
     suspend fun completeAppointment(appointment: Appointment, paymentMethod: String) {
@@ -60,6 +71,7 @@ class SalonRepository(private val dao: SalonDao) {
             paymentStatus = if (appointment.paymentStatus.startsWith("PAGO")) appointment.paymentStatus else "PAGO_$paymentMethod"
         )
         dao.updateAppointment(updatedAppointment)
+        firestoreSync?.syncAppointment(updatedAppointment)
 
         // 2. Register financial transaction
         val tx = FinancialTransaction(
@@ -71,7 +83,9 @@ class SalonRepository(private val dao: SalonDao) {
             paymentMethod = paymentMethod,
             appointmentId = appointment.id
         )
-        dao.insertTransaction(tx)
+        val txId = dao.insertTransaction(tx)
+        val savedTx = if (tx.id == 0L) tx.copy(id = txId) else tx
+        firestoreSync?.syncTransaction(savedTx)
 
         // 3. Update client loyalty
         val pointsToEarn = (appointment.servicePrice / 10).toInt().coerceAtLeast(5)
@@ -112,6 +126,7 @@ class SalonRepository(private val dao: SalonDao) {
             status = if (apt.status == "AGENDADO") "CONFIRMADO" else apt.status
         )
         dao.updateAppointment(updated)
+        firestoreSync?.syncAppointment(updated)
 
         // Insert payment transaction
         val tx = FinancialTransaction(
@@ -123,15 +138,21 @@ class SalonRepository(private val dao: SalonDao) {
             paymentMethod = method,
             appointmentId = apt.id
         )
-        dao.insertTransaction(tx)
+        val txId = dao.insertTransaction(tx)
+        val savedTx = if (tx.id == 0L) tx.copy(id = txId) else tx
+        firestoreSync?.syncTransaction(savedTx)
     }
 
     suspend fun insertTransaction(transaction: FinancialTransaction): Long {
-        return dao.insertTransaction(transaction)
+        val id = dao.insertTransaction(transaction)
+        val savedTx = if (transaction.id == 0L) transaction.copy(id = id) else transaction
+        firestoreSync?.syncTransaction(savedTx)
+        return id
     }
 
     suspend fun deleteTransaction(transaction: FinancialTransaction) {
         dao.deleteTransaction(transaction)
+        firestoreSync?.deleteTransaction(transaction.id)
     }
 
     suspend fun insertProfessional(professional: Professional): Long {

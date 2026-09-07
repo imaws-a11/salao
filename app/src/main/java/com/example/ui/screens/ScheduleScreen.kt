@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.CloudQueue
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.MoreVert
@@ -106,6 +108,7 @@ fun ScheduleScreen(
     val services by viewModel.services.collectAsStateWithLifecycle()
     val professionals by viewModel.professionals.collectAsStateWithLifecycle()
     val loyaltyClients by viewModel.loyaltyClients.collectAsStateWithLifecycle()
+    val firestoreState by viewModel.firestoreSyncState.collectAsStateWithLifecycle()
 
     val isNewAppointmentVisible by viewModel.isNewAppointmentDialogVisible.collectAsStateWithLifecycle()
     val selectedAppointmentForPayment by viewModel.selectedAppointmentForPayment.collectAsStateWithLifecycle()
@@ -327,7 +330,7 @@ fun ScheduleScreen(
                                     Icon(Icons.Default.CloudDone, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
                                 }
                                 Text(
-                                    text = "BACKUP OK",
+                                    text = if (firestoreState.isLiveConnected) "FIRESTORE OK" else "BACKUP OK",
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.5.sp,
@@ -398,13 +401,44 @@ fun ScheduleScreen(
                         )
                     }
 
-                    Text(
-                        text = "${appointments.size} NO FILTRO",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp,
-                        color = BentoPrimary
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Surface(
+                            shape = RoundedCornerShape(10.dp),
+                            color = if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.12f) else BentoSurfaceSubtle,
+                            border = BorderStroke(1.dp, if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.35f) else BentoBorderLight)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = if (firestoreState.isLiveConnected) Icons.Default.CloudDone else Icons.Default.CloudQueue,
+                                    contentDescription = null,
+                                    tint = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoTextSecondary,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                                Text(
+                                    text = if (firestoreState.isLiveConnected) "Firestore" else "Room Local",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoTextSecondary
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "${appointments.size} NO FILTRO",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.5.sp,
+                            color = BentoPrimary
+                        )
+                    }
                 }
             }
 

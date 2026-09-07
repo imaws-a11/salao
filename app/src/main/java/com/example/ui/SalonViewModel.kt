@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.auth.ClientAuthUser
 import com.example.data.auth.FirebaseAuthService
+import com.example.data.firestore.FirestoreSyncService
+import com.example.data.firestore.FirestoreSyncState
 import com.example.data.local.SalonDatabase
 import com.example.data.model.Appointment
 import com.example.data.model.ClientLoyalty
@@ -87,6 +89,9 @@ data class ProfessionalPerformance(
 
 class SalonViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val firestoreSyncService = FirestoreSyncService(application)
+    val firestoreSyncState: StateFlow<FirestoreSyncState> = firestoreSyncService.syncState
+
     private val repository: SalonRepository
     private val firebaseAuthService = FirebaseAuthService(application)
 
@@ -134,7 +139,8 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         val db = SalonDatabase.getDatabase(application, viewModelScope)
-        repository = SalonRepository(db.salonDao())
+        repository = SalonRepository(db.salonDao(), firestoreSyncService)
+        firestoreSyncService.startSync(db.salonDao(), viewModelScope)
 
         viewModelScope.launch {
             clientAuthUser.collect { user ->
@@ -591,15 +597,22 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
     fun syncCloudBackupNow() {
         viewModelScope.launch(Dispatchers.IO) {
             _isCloudSyncing.value = true
-            delay(1200) // Realistic cloud round-trip
             try {
+                val db = SalonDatabase.getDatabase(getApplication(), viewModelScope)
+                val firestoreResult = firestoreSyncService.pushAllDataToCloud(db.salonDao())
+
                 val bundle = repository.createCloudBackupBundle()
                 val json = CloudBackupManager.serializeBackup(bundle)
                 CloudBackupManager.saveCloudSnapshot(getApplication(), json)
                 _lastCloudBackupTime.value = System.currentTimeMillis()
-                _userMessage.emit("Backup em nuvem sincronizado e criptografado com sucesso!")
+
+                firestoreResult.onSuccess {
+                    _userMessage.emit("Sincronização em Nuvem (Firestore + Backup) realizada com sucesso!")
+                }.onFailure {
+                    _userMessage.emit("Backup salvo com segurança no cofre local e cache.")
+                }
             } catch (e: Exception) {
-                _userMessage.emit("Erro ao realizar backup: ${e.message}")
+                _userMessage.emit("Erro ao sincronizar: ${e.message}")
             } finally {
                 _isCloudSyncing.value = false
             }
@@ -609,19 +622,24 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
     fun restoreFromCloudBackup() {
         viewModelScope.launch(Dispatchers.IO) {
             _isCloudSyncing.value = true
-            delay(1000)
             try {
-                val cachedJson = CloudBackupManager.getCloudSnapshot(getApplication())
-                if (cachedJson != null) {
-                    val bundle = CloudBackupManager.deserializeBackup(cachedJson)
-                    repository.restoreFromBundle(bundle)
-                    _userMessage.emit("Dados restaurados da nuvem com sucesso!")
+                val db = SalonDatabase.getDatabase(getApplication(), viewModelScope)
+                val firestoreResult = firestoreSyncService.pullAllDataFromCloud(db.salonDao())
+
+                if (firestoreResult.isSuccess) {
+                    _userMessage.emit(firestoreResult.getOrNull() ?: "Dados restaurados do Firestore com sucesso!")
                 } else {
-                    // Fallback to fresh cloud bundle from initial state
-                    val bundle = repository.createCloudBackupBundle()
-                    val json = CloudBackupManager.serializeBackup(bundle)
-                    CloudBackupManager.saveCloudSnapshot(getApplication(), json)
-                    _userMessage.emit("Nenhum backup anterior encontrado. Novo ponto seguro criado.")
+                    val cachedJson = CloudBackupManager.getCloudSnapshot(getApplication())
+                    if (cachedJson != null) {
+                        val bundle = CloudBackupManager.deserializeBackup(cachedJson)
+                        repository.restoreFromBundle(bundle)
+                        _userMessage.emit("Dados restaurados do cofre de backup local com sucesso!")
+                    } else {
+                        val bundle = repository.createCloudBackupBundle()
+                        val json = CloudBackupManager.serializeBackup(bundle)
+                        CloudBackupManager.saveCloudSnapshot(getApplication(), json)
+                        _userMessage.emit("Nenhum backup anterior encontrado. Novo ponto seguro criado.")
+                    }
                 }
             } catch (e: Exception) {
                 _userMessage.emit("Erro ao restaurar dados da nuvem: ${e.message}")

@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.CloudQueue
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoneyOff
 import androidx.compose.material3.Card
@@ -73,6 +76,7 @@ fun FinanceScreen(
     val transactions by viewModel.filteredTransactions.collectAsStateWithLifecycle()
     val filter by viewModel.financeMonthFilter.collectAsStateWithLifecycle()
     val isNewTransactionVisible by viewModel.isNewTransactionDialogVisible.collectAsStateWithLifecycle()
+    val firestoreState by viewModel.firestoreSyncState.collectAsStateWithLifecycle()
 
     val totalRevenue = transactions.filter { it.type == "RECEITA" }.sumOf { it.amount }
     val totalExpense = transactions.filter { it.type == "DESPESA" }.sumOf { it.amount }
@@ -274,12 +278,44 @@ fun FinanceScreen(
 
             // Header
             item {
-                Text(
-                    text = "Lançamentos (${transactions.size})",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = BentoTextPrimary
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Lançamentos (${transactions.size})",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = BentoTextPrimary
+                    )
+
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.12f) else BentoSurfaceSubtle,
+                        border = BorderStroke(1.dp, if (firestoreState.isLiveConnected) EmeraldSuccess.copy(alpha = 0.35f) else BentoBorderLight)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (firestoreState.isLiveConnected) Icons.Default.CloudDone else Icons.Default.CloudQueue,
+                                contentDescription = null,
+                                tint = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoTextSecondary,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Text(
+                                text = if (firestoreState.isLiveConnected) "Firestore Sincronizado" else "Room Local Ativo",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (firestoreState.isLiveConnected) EmeraldSuccess else BentoTextSecondary
+                            )
+                        }
+                    }
+                }
             }
 
             // Transactions
